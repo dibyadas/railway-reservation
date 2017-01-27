@@ -45,7 +45,6 @@ class user:
  # def book_ticket(self)
 
 
-ticket_dict = {}
 
 class ticket:
 	def __init__(self,train,user,ticket_num):
@@ -63,13 +62,20 @@ def book_ticket():
 	if uid in users and users[uid].pwd == pwd:		
 		print("Welcome ",users[uid].name," !")
 	else:
-		print("No such user ID / Wrong Password !")
+		print("\n\nNo such user ID / Wrong Password !\n\n")
 		menu()
 	check_seat_availabilty('p')
-	choice = int(input("Enter the train number :- "))
-	for i in  trains:
-		if trains[i].num == choice:
-			trains[i].print_seat_availablity()
+	try:
+		choice = int(input("Enter the train number :- "))
+	except ValueError:
+		print("\n\nPlease properly enter the train number.\n\n")
+		menu()
+		book_ticket()
+	if choice in trains:
+			trains[choice].print_seat_availablity()
+	else:
+		print("\n\nEnter valid train number\n\n")
+		menu()
 	coach = input("Enter the coach :- ")
 	coach = coach.upper()
 	if coach in ('SL','1AC','2AC'):	
@@ -78,16 +84,41 @@ def book_ticket():
 			prompt = input("Confirm Ticket(s) (y/n) ? :- ")
 			if prompt == 'y':
 				trains[choice].book_ticket(coach,ticket_num)
-				print("Booking Successful!")
+				print("Booking Successful!\n\n")
 				tick = ticket(trains[choice],users[uid],ticket_num)
-				print("Please note PNR number :- ",tick.pnr)
+				print("Please note PNR number :- ",tick.pnr,"\n\n")
 				menu()
 			else:
-				print("Exiting...")
+				print("Exiting...\n\n")
 				menu()
 		else:
 			print(ticket_num," tickets not available")
 			menu()
+	else:
+		print("\n\nEnter proper coach\n\n")
+		menu()
+
+def cancel_ticket():
+	pnr = input("Enter the PNR number :- ")
+	if pnr in ticket_dict:
+		check_pnr(pnr)
+		choice = input("Do you want to cancel(y/n):- ")
+		if choice == 'y':
+			uid = int(input("Enter your id :- "))
+			pwd = input("Enter the password :- ")
+			if uid in users:
+				if users[uid].pwd == pwd:
+					print("\n\nTicket Cancelled.\n\n")
+				else:
+					print("\nEnter the right password\n")
+			else:
+				print("\nNo such user.Ticket not cancelled\n")
+				menu()
+		else:
+			print("\nTicket not cancelled\n")
+			menu()
+	menu()
+
 
 
 def check_seat_availabilty(flag = ''):
@@ -108,16 +139,17 @@ def check_seat_availabilty(flag = ''):
 	else:
 		pass
 
-def check_pnr():
-	pnr_num = input("Enter the PNR number :- ")
+def check_pnr(pnr_num = ''):
+	if pnr_num == '':
+		pnr_num = input("Enter the PNR number :- ")
 	if pnr_num in ticket_dict:
 		print("User name:- ",ticket_dict[pnr_num].user_name)
 		print("Train name:- ",ticket_dict[pnr_num].train_name)
 		print("No. of Tickets Booked :- ",ticket_dict[pnr_num].ticket_num)
-		menu()
 	else:
-		print("No such PNR number exists.")
-		menu()
+		print("\nNo such PNR number exists.\n")
+	menu()
+
 
 t1 = train('odisha',12345,'12:34','22:12','ctc','kgp','Wed',30,23,43,2205,320,234)
 t2 = train('howrah',12565,'02:34','23:12','hwr','kol','Mon',33,4,12,3434,435,234)
@@ -127,6 +159,7 @@ trains = {t1.num:t1,t2.num:t2,t3.num:t3}
 # print(train_dict[12565].name)
 u1 = user(1212,'dibya das','cuttack','7478021777','dibyadas')
 users={u1.uid : u1}
+ticket_dict = {}
 
 # train_file = open("t.pkl",'wb')
 # user_file = open("u.pkl",'wb')
@@ -153,11 +186,17 @@ def menu():
 	print("4.Check seat availibity")
 	print("5.Administrator mode")
 	print("6.Create new account")
-	option = int(input("Option = "))
+	try:
+		option = int(input("Option = "))
+	except ValueError:
+		print("\n\nPlease enter a valid option.\n\n")
+		menu()
 	if option == 1:
 		book_ticket()
 	elif option == 3:
 		check_pnr()
+	elif option == 2:
+		cancel_ticket()
 	elif option == 4:
 		check_seat_availabilty()
 
