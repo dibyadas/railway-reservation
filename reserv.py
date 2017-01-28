@@ -1,8 +1,10 @@
 import pickle
 import sys
 import random
+
+
 class train:
-    def __init__(self,name = '',num = 0,arr_time = '',dep_time = '',src = '' ,des = '',day_of_travel = '',seat_available_in_1AC = 0,seat_available_in_2AC = 0,seat_available_in_SL = 0,fare_1ac = 0, fare_2ac = 0 ,fare_sl = 0):
+    def __init__(self,name = '', num = 0, arr_time = '',dep_time = '',src = '' ,des = '',day_of_travel = '',seat_available_in_1AC = 0,seat_available_in_2AC = 0,seat_available_in_SL = 0,fare_1ac = 0, fare_2ac = 0 ,fare_sl = 0):
         self.name = name
         self.num = num
         self.arr_time = arr_time
@@ -34,13 +36,12 @@ class train:
 
 
 class user:
-	def __init__(self,uid = 0,name = '',hometown = '',cell_num = '',pwd = '',acc_num = ''):
+	def __init__(self,uid = 0,name = '',hometown = '',cell_num = '',pwd = ''):
 		self.uid = uid
 		self.name = name
 		self.hometown = ''
 		self.cell_num = ''
 		self.pwd = pwd
-		self.acc_num = acc_num
 		self.history = {}
  # def book_ticket(self)
 
@@ -57,7 +58,11 @@ class ticket:
 
 
 def book_ticket():
-	uid = int(input("Enter your User ID = "))
+	try:
+		uid = int(input("Enter your User ID = "))
+	except ValueError:
+		print("\nEnter valid User ID\n")
+		book_ticket()
 	pwd = input("Enter your password :- ")
 	if uid in users and users[uid].pwd == pwd:		
 		print("Welcome ",users[uid].name," !")
@@ -148,7 +153,19 @@ def check_pnr(pnr_num = ''):
 		print("No. of Tickets Booked :- ",ticket_dict[pnr_num].ticket_num)
 	else:
 		print("\nNo such PNR number exists.\n")
+	# menu()
+
+def create_new_acc():
+	user_name = input("Enter your user name:- ")
+	pwd = input("Enter your password :- ")
+	uid = random.randint(1000,9999)
+	hometown = input("Enter your hometown :- ")
+	cell_num = input("Enter your phone number :- ")
+	u = user(uid, user_name, hometown, cell_num, pwd)
+	print("Your user ID is :- ",uid)
+	users.update({u.uid : u})
 	menu()
+
 
 
 t1 = train('odisha',12345,'12:34','22:12','ctc','kgp','Wed',30,23,43,2205,320,234)
@@ -184,8 +201,7 @@ def menu():
 	print("2.Cancel Ticket")
 	print("3.Check PNR ")
 	print("4.Check seat availibity")
-	print("5.Administrator mode")
-	print("6.Create new account")
+	print("5.Create new account")
 	try:
 		option = int(input("Option = "))
 	except ValueError:
@@ -193,12 +209,14 @@ def menu():
 		menu()
 	if option == 1:
 		book_ticket()
-	elif option == 3:
-		check_pnr()
 	elif option == 2:
 		cancel_ticket()
+	elif option == 3:
+		check_pnr()
 	elif option == 4:
 		check_seat_availabilty()
+	elif option == 5:
+		create_new_acc()
 
 
 menu()
