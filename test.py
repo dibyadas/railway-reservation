@@ -67,19 +67,16 @@ def book_ticket():
 		print("Welcome ",users[uid].name," !")
 	else:
 		print("\n\nNo such user ID / Wrong Password !\n\n")
-		menu()
 	check_seat_availabilty('p')
 	try:
 		choice = int(input("Enter the train number :- "))
 	except ValueError:
 		print("\n\nPlease properly enter the train number.\n\n")
-		menu()
 		book_ticket()
 	if choice in trains:
 			trains[choice].print_seat_availablity()
 	else:
 		print("\n\nEnter valid train number\n\n")
-		menu()
 	coach = input("Enter the coach :- ")
 	coach = coach.upper()
 	if coach in ('SL','1AC','2AC'):
@@ -87,7 +84,6 @@ def book_ticket():
 			ticket_num = int(input("Enter the number of tickets :- "))
 		except ValueError:
 			print("\nEnter valid input !\n")
-			menu()
 		if trains[choice].check_availabilty(coach,ticket_num):
 			prompt = input("Confirm Ticket(s) (y/n) ? :- ")
 			if prompt == 'y':
@@ -95,16 +91,12 @@ def book_ticket():
 				print("Booking Successful!\n\n")
 				tick = ticket(trains[choice],users[uid],ticket_num)
 				print("Please note PNR number :- ",tick.pnr,"\n\n")
-				menu()
 			else:
 				print("Exiting...\n\n")
-				menu()
 		else:
 			print(ticket_num," tickets not available")
-			menu()
 	else:
 		print("\n\nEnter proper coach\n\n")
-		menu()
 
 def cancel_ticket():
 	pnr = input("Enter the PNR number :- ")
@@ -121,11 +113,8 @@ def cancel_ticket():
 					print("\nEnter the right password\n")
 			else:
 				print("\nNo such user.Ticket not cancelled\n")
-				menu()
 		else:
 			print("\nTicket not cancelled\n")
-			menu()
-	menu()
 
 
 
@@ -139,11 +128,9 @@ def check_seat_availabilty(flag = ''):
 			flag_2 += 1
 	if flag_2 == 0:
 		print("\n\nNo trains found between the stations you entered.\n\n")
-		menu()
 	if flag == '':
 		choice = int(input("Enter the train number :- "))
 		trains[choice].print_seat_availablity()
-		menu()
 	else:
 		pass
 
@@ -167,7 +154,6 @@ def create_new_acc():
 	u = user(uid, user_name, hometown, cell_num, pwd)
 	print("Your user ID is :- ",uid)
 	users.update({u.uid : u})
-	menu()
 
 
 
@@ -206,7 +192,6 @@ def menu():
 	print("4.Check seat availibity")
 	print("5.Create new account")
 	print("6.Check previous transaction")
-	print("7.Exit")
 	try:
 		option = int(input("Option = "))
 	except ValueError:
@@ -222,8 +207,8 @@ def menu():
 		check_seat_availabilty()
 	elif option == 5:
 		create_new_acc()
-	elif option == 7:
-		sys.exit()
 
 menu()
+while input("Continue(y/n) :- ") != 'n':
+	menu()
 

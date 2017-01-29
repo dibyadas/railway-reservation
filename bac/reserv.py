@@ -1,6 +1,8 @@
 import pickle
 import sys
 import random
+
+
 class train:
     def __init__(self,name = '', num = 0, arr_time = '',dep_time = '',src = '' ,des = '',day_of_travel = '',seat_available_in_1AC = 0,seat_available_in_2AC = 0,seat_available_in_SL = 0,fare_1ac = 0, fare_2ac = 0 ,fare_sl = 0):
         self.name = name
@@ -33,17 +35,6 @@ class train:
     	return True
 
 
-class ticket:
-	def __init__(self,train,user,ticket_num):
-		self.pnr = str(train.num)+str(user.uid)+str(random.randint(100,999))
-		self.train_name = train.name
-		self.user_name = user.name
-		self.ticket_num = ticket_num
-		user.history.update({self.pnr : self})
-		ticket_dict.update({self.pnr : self})
-
-
-
 class user:
 	def __init__(self,uid = 0,name = '',hometown = '',cell_num = '',pwd = ''):
 		self.uid = uid
@@ -53,6 +44,17 @@ class user:
 		self.pwd = pwd
 		self.history = {}
  # def book_ticket(self)
+
+
+
+class ticket:
+	def __init__(self,train,user,ticket_num):
+		self.pnr = str(train.num)+str(user.uid)+str(random.randint(100,999))
+		self.train_name = train.name
+		self.user_name = user.name
+		self.ticket_num = ticket_num
+		user.history.update({self.pnr : self})
+		ticket_dict.update({self.pnr : self})
 
 
 
@@ -82,12 +84,8 @@ def book_ticket():
 		menu()
 	coach = input("Enter the coach :- ")
 	coach = coach.upper()
-	if coach in ('SL','1AC','2AC'):
-		try:	
-			ticket_num = int(input("Enter the number of tickets :- "))
-		except ValueError:
-			print("\nEnter valid input !\n")
-			menu()
+	if coach in ('SL','1AC','2AC'):	
+		ticket_num = int(input("Enter the number of tickets :- "))
 		if trains[choice].check_availabilty(coach,ticket_num):
 			prompt = input("Confirm Ticket(s) (y/n) ? :- ")
 			if prompt == 'y':
@@ -206,7 +204,6 @@ def menu():
 	print("4.Check seat availibity")
 	print("5.Create new account")
 	print("6.Check previous transaction")
-	print("7.Exit")
 	try:
 		option = int(input("Option = "))
 	except ValueError:
@@ -222,8 +219,7 @@ def menu():
 		check_seat_availabilty()
 	elif option == 5:
 		create_new_acc()
-	elif option == 7:
-		sys.exit()
+
 
 menu()
 
