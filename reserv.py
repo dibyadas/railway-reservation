@@ -54,56 +54,101 @@ class user:
 		self.history = {}
  # def book_ticket(self)
 
+class acceptors:
+	''' Class containing functions for accepting and 
+	validating values properly'''
+	def accept_uid():
+		uid = 0
+		try:
+			uid = int(input("Enter the User ID:- "))
+		except ValueError:
+			print("Please enter user ID properly.")
+			return acceptors.accept_uid()
+		else:
+			return uid
+
+	def accept_pwd():
+		pwd = input("Enter your password:- ")
+		return pwd
+
+
+	def accept_train_number():
+		train_num = 0
+		try:
+			train_num = int(input("Enter the train number :- "))
+		except ValueError:
+			print("Please enter train number properly.")
+			return acceptors.accept_train_number()
+		else:
+			if train_num not in trains:
+				print("Please enter a valid train number.")
+				return acceptors.accept_train_number()
+			else:
+				return train_num
+	
+
+
+	def accept_menu_option():
+		option = input("Enter your option :- ")
+		if option not in ('1','2','3','4','5','6','7'):
+			print("Please enter a valid option!")
+			return acceptors.accept_menu_option()
+		else:
+			return int(option)
+
+	def accept_coach():
+		coach = input("Enter the coach :- ")
+		coach = coach.upper()
+		if coach not in ('SL','1AC','2AC'):
+			print("Please enter coach properly.")
+		else:
+			return coach
+
+	def accept_prompt():
+		prompt = input("Confirm? (y/n) :-")
+		if prompt not in ('y','n'):
+			print("Please enter proper choice.")
+			acceptors.accept_prompt()
+		return prompt		
+
+	def accept_ticket_num():
+		ticket_num = 0
+		try:
+			ticket_num = int(input("Enter the number of tickets :- "))
+		except ValueError:
+			print("Enter proper ticket number.")
+			return acceptors.accept_ticket_num()
+		else:
+			return ticket_num
 
 
 def book_ticket():
-	try:
-		uid = int(input("Enter your User ID = "))
-	except ValueError:
-		print("\nEnter valid User ID\n")
-		book_ticket()
-	pwd = input("Enter your password :- ")
+	uid = acceptors.accept_uid()
+	pwd = acceptors.accept_pwd()
 	if uid in users and users[uid].pwd == pwd:		
 		print("Welcome ",users[uid].name," !")
 	else:
 		print("\n\nNo such user ID / Wrong Password !\n\n")
 		menu()
 	check_seat_availabilty('p')
-	try:
-		choice = int(input("Enter the train number :- "))
-	except ValueError:
-		print("\n\nPlease properly enter the train number.\n\n")
-		menu()
-		book_ticket()
-	if choice in trains:
-			trains[choice].print_seat_availablity()
-	else:
-		print("\n\nEnter valid train number\n\n")
-		menu()
-	coach = input("Enter the coach :- ")
-	coach = coach.upper()
-	if coach in ('SL','1AC','2AC'):
-		try:	
-			ticket_num = int(input("Enter the number of tickets :- "))
-		except ValueError:
-			print("\nEnter valid input !\n")
+	choice = acceptors.accept_train_number()
+	trains[choice].print_seat_availablity()
+	coach = acceptors.accept_coach()
+	ticket_num = acceptors.accept_ticket_num()
+	if trains[choice].check_availabilty(coach,ticket_num):
+		print("You have to pay :- ",trains[choice].fare[coach]*ticket_num,"  ")
+		prompt = acceptors.accept_prompt()
+		if prompt == 'y':
+			trains[choice].book_ticket(coach,ticket_num)
+			print("Booking Successful!\n\n")
+			tick = ticket(trains[choice],users[uid],ticket_num)
+			print("Please note PNR number :- ",tick.pnr,"\n\n")
 			menu()
-		if trains[choice].check_availabilty(coach,ticket_num):
-			prompt = input("Confirm Ticket(s) (y/n) ? :- ")
-			if prompt == 'y':
-				trains[choice].book_ticket(coach,ticket_num)
-				print("Booking Successful!\n\n")
-				tick = ticket(trains[choice],users[uid],ticket_num)
-				print("Please note PNR number :- ",tick.pnr,"\n\n")
-				menu()
-			else:
-				print("Exiting...\n\n")
-				menu()
 		else:
-			print(ticket_num," tickets not available")
+			print("Exiting...\n\n")
 			menu()
 	else:
-		print("\n\nEnter proper coach\n\n")
+		print(ticket_num," tickets not available")
 		menu()
 
 def cancel_ticket():
@@ -112,7 +157,10 @@ def cancel_ticket():
 		check_pnr(pnr)
 		choice = input("Do you want to cancel(y/n):- ")
 		if choice == 'y':
-			uid = int(input("Enter your id :- "))
+			try:
+				uid = int(input("Enter your id :- "))
+			except ValueError:
+				print
 			pwd = input("Enter the password :- ")
 			if uid in users:
 				if users[uid].pwd == pwd:
@@ -141,8 +189,8 @@ def check_seat_availabilty(flag = ''):
 		print("\n\nNo trains found between the stations you entered.\n\n")
 		menu()
 	if flag == '':
-		choice = int(input("Enter the train number :- "))
-		trains[choice].print_seat_availablity()
+		train_num = acceptors.accept_train_number()
+		trains[train_num].print_seat_availablity()
 		menu()
 	else:
 		pass
@@ -169,6 +217,11 @@ def create_new_acc():
 	users.update({u.uid : u})
 	menu()
 
+# def check_prev_trans():
+# 	uid = int(input("Enter your id :- "))
+# 	pwd = input("Enter the password :- ")
+# 	if uid in users:
+# 		if users[uid].pwd == pwd: 
 
 
 t1 = train('odisha',12345,'12:34','22:12','ctc','kgp','Wed',30,23,43,2205,320,234)
@@ -207,11 +260,7 @@ def menu():
 	print("5.Create new account")
 	print("6.Check previous transaction")
 	print("7.Exit")
-	try:
-		option = int(input("Option = "))
-	except ValueError:
-		print("\n\nPlease enter a valid option.\n\n")
-		menu()
+	option = acceptors.accept_menu_option()
 	if option == 1:
 		book_ticket()
 	elif option == 2:
@@ -222,6 +271,7 @@ def menu():
 		check_seat_availabilty()
 	elif option == 5:
 		create_new_acc()
+
 	elif option == 7:
 		sys.exit()
 
