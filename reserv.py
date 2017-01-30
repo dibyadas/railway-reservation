@@ -2,6 +2,7 @@ import pickle
 import sys
 import random
 class train:
+	'''class defining train'''
     def __init__(self,name = '', num = 0, arr_time = '',dep_time = '',src = '' ,des = '',day_of_travel = '',seat_available_in_1AC = 0,seat_available_in_2AC = 0,seat_available_in_SL = 0,fare_1ac = 0, fare_2ac = 0 ,fare_sl = 0):
         self.name = name
         self.num = num
@@ -34,6 +35,7 @@ class train:
 
 
 class ticket:
+	'''class for ticket '''
 	def __init__(self,train,user,ticket_num):
 		self.pnr = str(train.num)+str(user.uid)+str(random.randint(100,999))
 		self.train_name = train.name
@@ -45,6 +47,7 @@ class ticket:
 
 
 class user:
+	'''class for user'''
 	def __init__(self,uid = 0,name = '',hometown = '',cell_num = '',pwd = ''):
 		self.uid = uid
 		self.name = name
@@ -52,7 +55,7 @@ class user:
 		self.cell_num = ''
 		self.pwd = pwd
 		self.history = {}
- # def book_ticket(self)
+
 
 class acceptors:
 	''' Class containing functions for accepting and 
@@ -101,6 +104,7 @@ class acceptors:
 		coach = coach.upper()
 		if coach not in ('SL','1AC','2AC'):
 			print("Please enter coach properly.")
+			return acceptors.accept_coach()
 		else:
 			return coach
 
@@ -204,7 +208,7 @@ def check_pnr(pnr_num = ''):
 		print("No. of Tickets Booked :- ",ticket_dict[pnr_num].ticket_num)
 	else:
 		print("\nNo such PNR number exists.\n")
-	# menu()
+	menu()
 
 def create_new_acc():
 	user_name = input("Enter your user name:- ")
