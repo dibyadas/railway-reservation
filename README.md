@@ -8,8 +8,6 @@ Book, cancel and query ticket reservation using the following application.
 
 #To use, just run the python script
 
-# To use, just run the python script
-
 
 <h2>Booking Ticket</h2>
 -----------------------
