@@ -124,6 +124,8 @@ class acceptors:
 		ticket_num = 0
 		try:
 			ticket_num = int(input("Enter the number of tickets :- "))
+			if ticket_num < 0:
+				raise ValueError
 		except ValueError:
 			print("Enter proper ticket number.")
 			return acceptors.accept_ticket_num()
