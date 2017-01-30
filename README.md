@@ -8,7 +8,7 @@ Check previous bookings too.
 <h2>Booking Ticket</h2>
 -----------------------
 
-[](/readme/booking.png)
+<img src="/readme/booking.png" >
 
 
 
