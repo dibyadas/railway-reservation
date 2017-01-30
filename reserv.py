@@ -1,4 +1,6 @@
 import random
+import pickle
+import sys
 
 logged_in = False
 uid = 0
@@ -257,9 +259,10 @@ def check_prev_bookings():
 	menu()
 
 def end():
+	s()
 	print("------------------------------------------------Thank You!-----------------------------------------------------------------------")
 	print("---------------------------------------------------------------------------------------------------------------------------------")
-
+	sys.exit()
 
 
 t1 = train('odisha',12345,'12:34','22:12','ctc','kgp','Wed',30,23,43,2205,320,234)
@@ -271,9 +274,25 @@ u2 = user(2322,'alex parrish','new york','7873752967','alexparrish')
 users={u1.uid : u1, u2.uid : u2}
 ticket_dict = {}
 
+def load():
+	global  trains,users,ticket_dict
+	with open("data.pkl","rb") as f:
+		trains = pickle.load(f)
+		users = pickle.load(f)
+		ticket_dict = pickle.load(f)
+
+def s():
+	with open("data.pkl","wb") as f:
+		pickle.dump(trains,f)
+		pickle.dump(users,f)
+		pickle.dump(ticket_dict,f)
+
+
+
 
 print("--------------------------------------------------Welcome to Railway Reservation Portal----------------------------------------------")
 print("-------------------------------------------------------------------------------------------------------------------------------------")
+load()
 
 
 def menu():
