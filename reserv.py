@@ -43,6 +43,7 @@ class ticket:
 		self.pnr = str(train.num)+str(user.uid)+str(random.randint(100,999))
 		self.train_num = train.num
 		self.coach = coach
+		self.uid = uid
 		self.train_name = train.name
 		self.user_name = user.name
 		self.ticket_num = ticket_num
@@ -173,11 +174,13 @@ def cancel_ticket():
 			if logged_in:
 				print("Ticket Cancelled.\n")
 				trains[ticket_dict[pnr].train_num].seats[ticket_dict[pnr].coach] += ticket_dict[pnr].ticket_num
+				del users[ticket_dict[pnr].uid].history[pnr]
 				del ticket_dict[pnr]
 			else:
 				login('p')
 				print("Ticket Cancelled.\n")
 				trains[ticket_dict[pnr].train_num].seats[ticket_dict[pnr].coach] += ticket_dict[pnr].ticket_num
+				del users[ticket_dict[pnr].uid].history[pnr]
 				del ticket_dict[pnr]
 		else:
 			print("\nTicket not cancelled\n")
@@ -255,6 +258,7 @@ def check_prev_bookings():
 	if not logged_in:
 		login('p')
 	for i in users[uid].history:
+		print("\nPNR number = ",i)
 		check_pnr(i)
 	menu()
 
