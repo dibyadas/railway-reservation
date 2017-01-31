@@ -43,7 +43,7 @@ class ticket:
 		self.pnr = str(train.num)+str(user.uid)+str(random.randint(100,999))
 		self.train_num = train.num
 		self.coach = coach
-		self.uid = uid
+		self.uid = user.uid
 		self.train_name = train.name
 		self.user_name = user.name
 		self.ticket_num = ticket_num
@@ -287,6 +287,8 @@ def load():
 		users = pickle.load(f)
 		ticket_dict = pickle.load(f)
 
+
+
 def s():
 	with open("data.pkl","wb") as f:
 		pickle.dump(trains,f)
@@ -311,24 +313,10 @@ def menu():
 	print("6.Check previous bookings")
 	print("7.Login")
 	print("8.Exit")
-
+	func = { 1 : book_ticket, 2 : cancel_ticket, 3 : check_pnr, 4 : check_seat_availabilty, 5 : create_new_acc, 6 : check_prev_bookings, 7 : login, 8 : end}
 	option = acceptors.accept_menu_option()
-	if option == 1:
-		book_ticket()
-	elif option == 2:
-		cancel_ticket()
-	elif option == 3:
-		check_pnr()
-	elif option == 4:
-		check_seat_availabilty()
-	elif option == 5:
-		create_new_acc()
-	elif option == 6:
-		check_prev_bookings()
-	elif option == 7:
-		login()
-	elif option == 8:
-		end()
+	func[option]()
+	
 
 menu()
 
